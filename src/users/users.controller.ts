@@ -1,36 +1,36 @@
 import { Controller, Get, Param, Post, Body, Delete, Query, Put, Res, HttpStatus, HttpException, UseFilters } from '@nestjs/common';
 import { HttpExceptionFilter } from 'src/exceptions/http-exception.filters';
 import { SearchParams } from 'src/validation/SearchParams';
-import { CoursesService } from './courses.service';
-import { CreateCourseDto } from './create-course.dto';
+import { UsersService } from './users.service';
+import { CreateUserDto } from './create-user.dto';
 
-@Controller('courses')
+@Controller('users')
 // @UseFilters(new HttpExceptionFilter)
-export class CoursesController {
-    constructor(private coursesService: CoursesService) { }
+export class UsersController {
+    constructor(private usersService: UsersService) { }
 
     @Get()
-    async getCourses(@Res() response) {
+    async getUsers(@Res() response) {
         try {
-            const getAllCourse = await this.coursesService.findAll();
-            return response.status(HttpStatus.OK).json({ getAllCourse });
+            const getAllUsers= await this.usersService.findAll();
+            return response.status(HttpStatus.OK).json({ getAllUsers});
         } catch (err) {
             throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         }
     }
 
     // @Get()
-    // async getAllCourse(){
+    // async getAllUser(){
     //     throw new HttpException({
     //         status: HttpStatus.FORBIDDEN,
     //         error: 'This is a custom message',
     //       }, HttpStatus.FORBIDDEN);
     // }
 
-    @Get(':courseId')
-    async getCourse(@Param('courseId') courseId) {
+    @Get(':userId')
+    async getCourse(@Param('userId') userId) {
         try{
-            const result = await this.coursesService.readById(courseId);
+            const result = await this.usersService.readById(userId);
             if (result) {
                 return result;
             }
@@ -44,18 +44,18 @@ export class CoursesController {
     }
 
     @Post()
-    async addCourse(@Body() createCourseDto: CreateCourseDto, @Res() response) {
+    async addUser(@Body() usersUserDto: CreateUserDto, @Res() response) {
         try {
-            const createCourse = await this.coursesService.create(createCourseDto);
-            return response.status(HttpStatus.OK).json(createCourse);
+            const createUser= await this.usersService.create(usersUserDto);
+            return response.status(HttpStatus.OK).json(createUser);
         } catch (err) {
             throw new HttpException('CAN NOT CREATE!', HttpStatus.BAD_REQUEST);
         }
     }
     @Put('/:id')
-    async update(@Res() response, @Param() params: SearchParams, @Body() CourseDto: CreateCourseDto) {
+    async update(@Res() response, @Param() params: SearchParams, @Body() UserDto: CreateUserDto) {
         try {
-            const updatedCount = await this.coursesService.update(params, CourseDto);
+            const updatedCount = await this.usersService.update(params, UserDto);
             return response.status(HttpStatus.OK).json({
                 updatedCount
             })
@@ -64,8 +64,8 @@ export class CoursesController {
     }
 
     @Delete('/:id')
-    async deleteCourse(@Param('id') id) {
-        const delCourses = await this.coursesService.delete(id)
+    async deleteUser(@Param() params: 'id', @Res() response) {
+        const delUsers = await this.usersService.delete(params)
             .then((result) => {
                 if (result) {
                     return result;

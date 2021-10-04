@@ -28,6 +28,4 @@ export class CoursesService {
     async readById(id): Promise<Course> {
         return await this.courseModel.findById(id).exec();
     }
-
-
 }

@@ -1,18 +1,17 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { IsEmail, Length, IsNotEmpty } from 'class-validator';
 
 export type CourseDocument = Course & Document;
 
 @Schema()
 export class Course {   
-    @IsNotEmpty()
+    @Prop({required: true})
     title: string;
 
-    @Length(20, 200)
+    @Prop()
     description: string;
 
-    @IsEmail()
+    @Prop()
     email: string;
 
     @Prop()
@@ -24,5 +23,6 @@ export class Course {
     @Prop()
     url: string;
 }
+
 
 export const CourseSchema = SchemaFactory.createForClass(Course);
